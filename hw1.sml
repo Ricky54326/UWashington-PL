@@ -23,4 +23,21 @@ fun number_in_months (dates: (int*int*int) list, months: int list) =
       number_in_month (dates, hd months) + 
       number_in_months(dates, tl months)
 
+fun dates_in_month (dates: (int*int*int) list, month: int) =
+  []
+
+fun dates_in_months (dates: (int*int*int) list, months: int list) =
+  []
+
+(* get nth string from list of strings *)
+fun get_nth (strs: string list, n: int) =
+  let fun count(from:int, to:int, strs: string list) =
+	if from=to
+	then hd strs
+	else count(from+1, to, tl strs)
+  in
+      count(0, n, strs)
+  end 
 		    
+
+      
