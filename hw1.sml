@@ -42,12 +42,16 @@ fun get_nth (strs: string list, n: int) =
 
 (* converts date into string *)
 fun date_to_string (date:(int*int*int) ) =
-val months = ["January", "Feburary", "March", "April", "May", "June",
+let
+    val months = ["January", "Feburary", "March", "April", "May", "June",
 	      "July", "August", "September", "October", "November", "December"]
 
 
-val month = get_nth (months, #2 date)
+    val month = get_nth (months, #2 date - 1)
 
+in
+     month ^ " " ^ Int.toString(#3 date) ^ ", " ^ Int.toString(#1 date)
+end 
 		    
 
 		    
