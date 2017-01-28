@@ -40,4 +40,16 @@ fun get_nth (strs: string list, n: int) =
   end 
 		    
 
-      
+(* converts date into string *)
+fun date_to_string (date:(int*int*int) ) =
+val months = ["January", "Feburary", "March", "April", "May", "June",
+	      "July", "August", "September", "October", "November", "December"]
+
+
+val month = get_nth (months, #2 date)
+
+		    
+
+		    
+
+		       
