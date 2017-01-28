@@ -6,7 +6,7 @@ fun is_older (a : int*int*int,  b: int*int*int)=
   true
       (* TODO: IMPLEMENT *)
 
-(* number_in_month: returns #dates in given month *)
+(* number_in_month: returns dates in given month *)
 fun number_in_month (dates : (int*int*int) list, month: int) =
   if null dates
   then 0
@@ -24,10 +24,20 @@ fun number_in_months (dates: (int*int*int) list, months: int list) =
       number_in_months(dates, tl months)
 
 fun dates_in_month (dates: (int*int*int) list, month: int) =
-  []
+  if null dates orelse (#2 (hd dates)) = month
+  then []
+  else
+      hd dates :: dates_in_month (tl dates, month)
+      
+	       
+      
 
 fun dates_in_months (dates: (int*int*int) list, months: int list) =
-  []
+  if null dates orelse null months
+  then []
+  else
+      dates_in_month(dates, hd months) @
+      dates_in_months(dates, tl months)
 
 (* get nth string from list of strings *)
 fun get_nth (strs: string list, n: int) =
@@ -56,4 +66,8 @@ end
 
 		    
 
-		       
+(* Takes sum, returns n where sum of l[0,1..n-1] <= sum, but sum of l[..n] > *)
+fun number_before_reaching_sum (sum: int, nums: int list) =
+  if sum < 0
+  then 0
+  else 1 + number_before_reaching_sum (sum - hd nums, nums)
