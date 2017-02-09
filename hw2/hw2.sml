@@ -126,3 +126,7 @@ fun sum_cards(cs) =
 
   in aux(cs, 0)
   end
+
+fun score(cs, goal) =
+  let sum = sum_cards(cs)
+  in
