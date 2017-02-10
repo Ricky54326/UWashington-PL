@@ -78,17 +78,17 @@ exception IllegalMove
 
 (* put your solutions for problem 2 here *)
 
-fun card_color(card) =
-  case card of
+fun card_color(c:card) =
+  case c of
       (Clubs, _) => Black
     | (Spades, _)  => Black
     | _ => Red
 
-fun card_value(card) =
-  case card of
-      Num n => n
-    | Ace => 1
-    | _  => 10
+fun card_value(c:card) =
+  case c of
+      (_, Num n) => n
+    | (_, Ace) => 1
+    | (_, _)  => 10
 
 fun remove_card(cs, c, e) =
   case cs of
@@ -122,11 +122,21 @@ fun sum_cards(cs) =
   let fun aux(cs, sum) =
         case cs of
             [] => sum
-          | x::xs' => aux(xs', sum+card_value(x))
+          | x::xs' => aux(xs', sum+(card_value(x)))
 
   in aux(cs, 0)
   end
 
+
 fun score(cs, goal) =
-  let sum = sum_cards(cs)
+  let
+      val sum = sum_cards(cs)
+      val all_same = all_same_color(cs)
+      val divisor = if all_same then 2 else 1
   in
+      if sum > goal
+      then
+          (3 * (sum - goal)) div divisor
+      else
+          (goal - sum) div divisor
+  end
