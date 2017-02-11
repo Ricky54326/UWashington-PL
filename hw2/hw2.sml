@@ -87,7 +87,7 @@ fun card_color(c:card) =
 fun card_value(c:card) =
   case c of
       (_, Num n) => n
-    | (_, Ace) => 1
+    | (_, Ace) => 11
     | (_, _)  => 10
 
 fun remove_card(cs, c, e) =
@@ -139,4 +139,33 @@ fun score(cs, goal) =
           (3 * (sum - goal)) div divisor
       else
           (goal - sum) div divisor
+  end
+
+
+datatype move = Draw | Discard of card
+
+exception e
+
+fun officiate(cs:card list, ms:move list, goal:int) =
+  let
+      fun aux(cs:card list, ms:move list, held:card list) =
+
+        case ms of
+            [] => score(held, goal)
+          | x::xs' =>
+            (case x of
+                 Draw => (case cs of
+                              [] => score(held, goal)
+                            | y::ys' => let val new_held = y::held
+                                        in
+                                            if sum_cards(new_held) > goal
+                                            then score(new_held, goal)
+                                            else aux(ys', xs', new_held)
+                                        end
+                         )
+               | Discard c => aux(cs, xs', remove_card(held, c, IllegalMove))
+            )
+
+  in
+      aux(cs, ms, [])
   end
