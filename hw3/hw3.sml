@@ -39,5 +39,27 @@ datatype typ = Anything
 
 fun first_ch x = String.sub(x, 0)
 
+(* 1 *)
 fun only_capitals(xs: string list) =
    List.filter(Char.isUpper o first_ch) xs
+
+(* 2 *)
+fun longest_string1(xs) =
+  let
+      fun larger(x1, x2) =
+        if String.size(x1) > String.size(x2)
+        then x1
+        else x2
+  in List.foldl larger "" xs
+  end
+
+
+(* 3 *)
+fun longest_string2(xs) =
+  let
+      fun larger(x1, x2) =
+        if String.size(x1) >= String.size(x2)
+        then x1
+        else x2
+  in List.foldl larger "" xs
+  end
