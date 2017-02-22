@@ -44,7 +44,7 @@ fun only_capitals(xs: string list) =
    List.filter(Char.isUpper o first_ch) xs
 
 (* 2 *)
-fun longest_string1(xs) =
+fun longest_string1(xs:string list) =
   let
       fun larger(x1, x2) =
         if String.size(x1) > String.size(x2)
@@ -55,7 +55,7 @@ fun longest_string1(xs) =
 
 
 (* 3 *)
-fun longest_string2(xs) =
+fun longest_string2(xs: string list) =
   let
       fun larger(x1, x2) =
         if String.size(x1) >= String.size(x2)
@@ -63,3 +63,34 @@ fun longest_string2(xs) =
         else x2
   in List.foldl larger "" xs
   end
+
+(* 4 *)
+fun longest_string_helper (f:(int*int->bool)) (xs:string list): string =
+  let
+      fun larger(x1, x2) =
+        let
+            val l1 = String.size(x1);
+            val l2 = String.size(x2);
+        in
+            if f(l1, l2) then x1 else x2
+        end
+  in
+      List.foldl larger "" xs
+  end
+
+fun gt (x, y) =  x > y
+fun gte (x, y) = x >= y
+
+val longest_string3 = longest_string_helper gt
+val longest_string4 = longest_string_helper gte
+
+(* 5 TODO: Need to use composition*)
+fun longest_capitalized(xs: string list) =
+  let
+      val uppers = only_capitals xs;
+  in
+      longest_string_helper gt uppers
+  end
+
+(* 6 *)
+val rev_string = String.implode o rev o String.explode
