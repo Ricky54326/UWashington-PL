@@ -94,3 +94,12 @@ fun longest_capitalized(xs: string list) =
 
 (* 6 *)
 val rev_string = String.implode o rev o String.explode
+
+
+(* 7 *)
+fun first_answer ( f:('a -> 'b option)) (xs:'a list) =
+  let
+      val xs' = List.map f xs;
+  in
+      valOf (hd (List.filter isSome xs'))
+  end
