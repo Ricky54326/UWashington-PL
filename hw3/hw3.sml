@@ -3,36 +3,36 @@
 exception NoAnswer
 
 datatype pattern = Wildcard
-		 | Variable of string
-		 | UnitP
-		 | ConstP of int
-		 | TupleP of pattern list
-		 | ConstructorP of string * pattern
+		             | Variable of string
+		             | UnitP
+		             | ConstP of int
+		             | TupleP of pattern list
+		             | ConstructorP of string * pattern
 
 datatype valu = Const of int
-	      | Unit
-	      | Tuple of valu list
-	      | Constructor of string * valu
-
+	            | Unit
+	            | Tuple of valu list
+	            | Constructor of string * valu
 fun g f1 f2 p =
-    let
-	val r = g f1 f2
-    in
-	case p of
-	    Wildcard          => f1 ()
-	  | Variable x        => f2 x
-	  | TupleP ps         => List.foldl (fn (p,i) => (r p) + i) 0 ps
-	  | ConstructorP(_,p) => r p
-	  | _                 => 0
-    end
+  let
+	    val r = g f1 f2
+  in
+	    case p of
+	        Wildcard          => f1 ()
+	      | Variable x        => f2 x
+	      | TupleP ps         => List.foldl (fn (p,i) => (r p) + i) 0 ps
+	      | ConstructorP(_,p) => r p
+	      | _                 => 0
+  end
+
 
 (**** for the challenge problem only ****)
 
 datatype typ = Anything
-	     | UnitT
-	     | IntT
-	     | TupleT of typ list
-	     | Datatype of string
+	           | UnitT
+	           | IntT
+	           | TupleT of typ list
+	           | Datatype of string
 
 (**** you can put all your code here ****)
 
@@ -78,7 +78,7 @@ fun longest_string_helper (f:(int*int->bool)) (xs:string list): string =
       List.foldl larger "" xs
   end
 
-fun gt (x, y) =  x > y
+fun gt (x, y)  = x > y
 fun gte (x, y) = x >= y
 
 val longest_string3 = longest_string_helper gt
@@ -97,9 +97,24 @@ val rev_string = String.implode o rev o String.explode
 
 
 (* 7 *)
-fun first_answer ( f:('a -> 'b option)) (xs:'a list) =
+fun first_answer ( f:('a -> 'b option)) (xs:'a list) : 'b =
+  case (List.find isSome (map f xs)) of
+      SOME (SOME (v)) => v
+    | _ => raise NoAnswer
+
+
+(* 8 *)
+fun all_answers ( f:('a -> 'b list option)) (xs:'a list) : 'b list option =
   let
       val xs' = List.map f xs;
   in
-      valOf (hd (List.filter isSome xs'))
+      case List.find (not o isSome) xs' of
+          SOME v => NONE
+        | _ => SOME(List.concat (map valOf xs'))
   end
+
+
+(* 9 *)
+val count_wildcards = g (fn () => 1) (fn _ => 0);
+val count_wild_and_variable_lengths = g (fn() => 1) String.size;
+val count_some_var = fn s => g (fn () => 0) (fn x => if s = x then 1 else 0);
