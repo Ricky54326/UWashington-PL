@@ -34,3 +34,10 @@
                  (cons n (funny-number (+ n 1))))))))
     (funny-number 1)))
 
+
+(define dan-then-dog
+  (lambda()
+  (letrec ((dan (lambda() (cons "dan.jpg" dog)))
+        (dog (lambda() (cons "dog.jpg" dan))))
+    (dan))))
+  
