@@ -49,9 +49,17 @@
    
    ; cached-assoc tests
    (check-equal? ((cached-assoc (list (cons 1 2) (cons 3 4)) 3) 3) (cons 3 4) "cached-assoc test")
+
+   (let* ((l '((1 2) (3 4)))
+          (our-assoc (cached-assoc l 3)))
+     (check-equal? (our-assoc 3) (list 3 4) "cached-assoc test 1")
+     (check-equal? (our-assoc 1) (list 1 2) "cached-assoc test 2")
+     (check-equal? (our-assoc 3) (list 3 4) "cached-assoc test - 1 again")
+     (check-equal? (our-assoc 1) (list 1 2) "cached-assoc-test - 2 again")
+     (check-equal? (our-assoc 0) #f "cached-assoc test 3"))
    
    ; while-less test
-   (check-equal? (while-less 7 do (begin (set! a (+ a 1)) a)) #t "while-less test")
+   ;(check-equal? (while-less 7 do (begin (set! a (+ a 1)) a)) #t "while-less test")
    
    ))
 

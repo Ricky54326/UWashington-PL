@@ -4,6 +4,7 @@
 (provide (all-defined-out)) ;; so we can put tests in a second file
 
 ;; put your code below
+(define ones (lambda () (cons 1 ones)))
 
 (define (sequence low high stride)
   (if (< high low)
@@ -34,10 +35,45 @@
                  (cons n (funny-number (+ n 1))))))))
     (funny-number 1)))
 
-
 (define dan-then-dog
   (lambda()
-  (letrec ((dan (lambda() (cons "dan.jpg" dog)))
-        (dog (lambda() (cons "dog.jpg" dan))))
-    (dan))))
-  
+    (cons "dan.jpg" (lambda() (cons "dog.jpg" dan-then-dog)))))
+
+(define (stream-add-zero s)
+  (let ((result (s))) 
+  (lambda()
+     (cons (cons 0 (car result)) (stream-add-zero (cdr result))))))
+
+(define (cycle-lists xs ys)
+  (letrec ((cycle
+            (lambda(n)
+              (lambda()
+                (cons (cons (list-nth-mod xs n) (list-nth-mod ys n)) (cycle (+ 1 n)))))))
+    (cycle 0)))
+                            
+      
+(define (vector-assoc v vec)
+  (letrec ((vector-iterate
+            (lambda(n)
+              (if (>= n (vector-length vec))
+                  #f
+                  (let ((current-element (vector-ref vec n)))
+                    (if (and (pair? current-element) (equal? (car current-element) v))
+                        current-element
+                        (vector-iterate (+ 1 n))))))))
+    (vector-iterate 0)))
+
+(define (cached-assoc xs n)
+  (let ([memo (make-vector n #f)]
+        [index 0])
+    (lambda (v)
+      [result (vector-assoc v memo)])
+    (if (pair? result)
+        (car result)
+        (let([ans (assoc v xs)])
+          ((begin vector-set! memo index ans)
+           (set! index (modulo n (+ 1 index)))
+           ans)))))
+
+                
+                
